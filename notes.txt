@@ -1,41 +1,134 @@
-Existing Tasks
+MultimodalCoTDataset Task Overview
+============================
 
-IsoBench [8]: Math Parity (383 problems), Math Convexity (255), 
-   Graph Maxflow (128), Graph Connectivity (128), Graph Isomorphism (128), Winner ID (257)
-Vision tasks: V*Bench (257 problems), MMVP (300), and 
-   various BLINK tasks ranging from 124 to 172 problems each
+1. Seed Tasks (Original VisualSketchpad)
+--------------------------------
 
-Extended Task Categories
+IsoBench Tasks [Total: 1279]
+- Math Parity (383)
+- Math Convexity (255)
+- Graph Maxflow (128)
+- Graph Connectivity (128)
+- Graph Isomorphism (128)
+- Winner ID (257)
 
-A. Programmatically Generated Tasks
----------------------------------
+Vision Tasks [~800+]
+- V*Bench (257)
+- MMVP (300)
+- BLINK Tasks (124-172 each)
+  * Spatial Relations
+  * Depth Perception
+  * Jigsaw Puzzles
+
+2. Extended Tasks
+---------------
+
+A. Programmatically Generated
+-------------------------
+
 physics/
-- Content: Mechanics, force diagrams, trajectories, vector fields
-- Implementation: Use symbolic engines (SymPy), matplotlib for diagrams, physics solvers
-- Generate: Force diagrams, projectile motion, free-body problems
+✦ Content:
+  - Mechanics problems
+  - Force diagrams
+  - Trajectories
+  - Vector fields
+✦ Implementation:
+  - SymPy for symbolic computation
+  - Matplotlib for diagrams
+  - Physics solvers for validation
 
 calculus/
-- Content: Derivatives, integrals, tangent lines, optimization plots
-- Implementation: Use matplotlib + sympy for derivatives/integrals
-- Generate: Plots showing tangent lines, concavity, area under curve
+✦ Content:
+  - Derivatives & integrals
+  - Tangent lines
+  - Optimization plots
+✦ Implementation:
+  - Matplotlib + SymPy integration
+  - Visual function analysis
+  - Step-by-step solution plots
 
 circuit_diagrams/
-- Content: Circuit analysis problems with resistors, voltage, current
-- Implementation: Use schemdraw library
-- Generate: Circuit diagrams + calculations for resistance, current, voltage
+✦ Content:
+  - Circuit analysis
+  - Component relationships
+  - Current/voltage problems
+✦ Implementation:
+  - Schemdraw for diagrams
+  - Circuit simulation
+  - Component calculations
 
 maze/
-- Content: Puzzle-solving tasks — reasoning over mazes, shortest path
-- Implementation: Generate grid mazes programmatically
-- Generate: Pathfinding questions, BFS/DFS traces for CoT
+✦ Content:
+  - Path finding
+  - Shortest routes
+  - Algorithmic reasoning
+✦ Implementation:
+  - Grid maze generation
+  - BFS/DFS visualization
+  - Solution path tracing
 
 tetris/
-- Content: Predict next move, reason about piece fits, sketch paths
-- Implementation: Use pre-coded Tetris states or simulation
-- Generate: Board states, optimal move predictions
+✦ Content:
+  - Move prediction
+  - Piece placement
+  - Strategy planning
+✦ Implementation:
+  - State simulation
+  - Move validation
+  - Visual state tracking
 
 turing/
-- Content: Finite automata diagrams, Turing machine tapes
+✦ Content:
+  - Finite automata diagrams
+  - Turing machine tapes
+  - State transitions
+✦ Implementation:
+  - FSM/graph libraries
+  - Visual state machines
+  - Execution traces
+
+B. Scraped & LLM-Enhanced
+----------------------
+
+scientific_diagrams/
+✦ Content:
+  - arXiv figures
+  - Wikipedia diagrams
+  - Educational resources
+✦ Process:
+  - Web scraping
+  - OCR processing
+  - LLM-based reasoning
+
+ocr_caption/
+✦ Content:
+  - Textbook figures
+  - Research diagrams
+  - Technical illustrations
+✦ Process:
+  - Caption extraction
+  - Context analysis
+  - Question generation
+
+code_diagrams/
+✦ Content:
+  - Flowcharts
+  - UML diagrams
+  - System architectures
+✦ Process:
+  - Repository mining
+  - Diagram parsing
+  - Logic inference
+
+chemistry/
+✦ Content:
+  - Reaction mechanisms
+  - Molecular structures
+  - Equation balancing
+✦ Implementation:
+  - PubChem integration
+  - RDKit visualization
+  - Reaction prediction
 - Implementation: Use FSM or graph libraries
 - Generate: Machine states, tapes, visual state transitions
 
@@ -61,3 +154,19 @@ chemistry/
 - Mixed Approach:
   * Programmatic: Generate balancing equations, simple reactions
   * Scraped: Complex molecules/reactions from PubChem, papers
+
+When You Don't Need Vision Experts
+1. Pure math tasks
+2. Geometry from scratch
+3. Physics diagrams
+4. Function plots
+5. Turing machines
+6. Circuit diagrams
+7. Maze generations
+
+GPT-4 can generate code for the sketch, and you don't need vision tools.
+
+When You Do Need Vision Experts
+1. Reasoning about existing images
+2. Modifying or segmenting figures (e.g., OCR-captioned scientific figures)
+3. Analyzing diagrams with vague or noisy inputs
