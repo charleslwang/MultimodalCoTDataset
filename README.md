@@ -1,3 +1,53 @@
+# **Multimodal Chain-of-Thought (CoT) Dataset Creation Pipeline**
+
+## **Overview**
+This project extends the **Visual Sketchpad** framework by creating an **automated pipeline** for generating a **multimodal Chain-of-Thought (CoT)** dataset. The dataset is aimed at training models to perform **multimodal reasoning** by combining **text and images through visual sketching steps**, across multiple domains. This includes traditional tasks such as geometry and graph theory, as well as new domains like physics, chemistry, and interactive tasks like games.
+
+The original Visual Sketchpad paper (NeurIPS 2024) introduced a framework for generating **step-by-step multimodal reasoning traces** that include both text and visual sketches. This project uses and extends their **LLM-powered agent framework**, integrates their **vision experts**, and expands their task coverage to create a broader and more scalable multimodal dataset — suitable for training **R1-style any-to-any** multimodal models.
+
+---
+
+## **Visual Sketchpad Recap**
+
+The Visual Sketchpad dataset contains **2046 tasks** across multiple categories. Each task simulates how a multimodal agent might reason step by step, using sketches to support intermediate steps.
+
+### **Domains Covered**:
+- **Geometry**: Angle construction, area computation, triangle proofs.
+- **Graph Theory**: Node connectivity, isomorphism, pathfinding.
+- **Mathematics**: Convexity, parity, functional plots.
+- **Games**: Sokoban and similar grid-based reasoning.
+- **Visual Reasoning**: Depth maps, segmentation, jigsaw problems.
+
+---
+
+## **How Visual Sketchpad Generates Reasoning Traces**
+
+Unlike traditional rule-based systems, Visual Sketchpad uses **LLM-based agents** (e.g., GPT-4 via OpenAI API) to generate natural language reasoning.
+
+### 🔧 GPT-Driven Agent Reasoning:
+- An **assistant agent** sends prompts to GPT-4 using a notebook-style system message.
+- GPT-4 produces:
+  - **Natural language explanations**
+  - **Python code** to generate sketches or analyze diagrams
+- The code is **executed locally** by the system (e.g., `matplotlib`, `PIL`), and visual outputs are saved as part of the reasoning trace.
+- The **entire conversation**, including user messages, GPT-4 responses, generated images, and code outputs, is saved as the final trace.
+
+### 🧪 Example Trace Format:
+```
+USER: <img src="triangle.png"> What is angle ABC?
+
+A:
+Step 1: Let's draw an auxiliary line parallel to side AC.
+```python
+# Python code block from GPT-4
+draw_auxiliary_line(...)
+```
+
+[Sketch: line_added.png]
+
+Step 2: Using the new triangle, we deduce angle ABC is 45°.
+```
+
 ### ✅ Pros:
 - Human-like, natural reasoning
 - Flexible and expressive
@@ -102,3 +152,6 @@ These tools run as microservices (Flask/Gradio) and are accessed via HTTP API in
   - `segment_and_mark()`
   - `detection()`
   - `overlay_images()`
+
+---
+
