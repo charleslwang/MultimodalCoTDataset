@@ -1,0 +1,11 @@
+new tasks:
+physics/	Mechanics, force diagrams, trajectories, vector fields
+chemistry/	Reaction diagrams, balancing equations, atomic structures
+calculus/	Derivatives, integrals, tangent lines, optimization plots
+turing/	Finite automata diagrams, Turing machine tapes
+circuit_diagrams/	Circuit analysis problems with resistors, voltage, current
+maze/	Puzzle-solving tasks — reasoning over mazes, shortest path
+tetris/	Predict next move, reason about piece fits, sketch possible paths
+scientific_diagrams/	Diagrams scraped from arXiv or Wikipedia with LLM-generated CoT
+ocr_caption/	Images with scientific figure captions → generate reasoning over them
+code_diagrams/	Flowcharts or code visualizations, reasoning about program structure
