@@ -38,6 +38,8 @@ USER: <img src="triangle.png"> What is angle ABC?
 
 A:
 Step 1: Let's draw an auxiliary line parallel to side AC.
+```
+
 ```python
 # Python code block from GPT-4
 draw_auxiliary_line(...)
@@ -46,7 +48,6 @@ draw_auxiliary_line(...)
 [Sketch: line_added.png]
 
 Step 2: Using the new triangle, we deduce angle ABC is 45°.
-```
 
 ### ✅ Pros:
 - Human-like, natural reasoning
@@ -155,3 +156,11 @@ These tools run as microservices (Flask/Gradio) and are accessed via HTTP API in
 
 ---
 
+## ✅ Summary
+
+This project builds on Visual Sketchpad's LLM-assisted agent framework and vision tools to create a **scalable, diverse, and richly structured multimodal CoT dataset**.
+
+With a modular design and a flexible task format, you can:
+- Rapidly expand to new scientific domains
+- Leverage GPT-4 to produce step-by-step explanations and sketches
+- Train future R1-style models that **learn to sketch as part of reasoning**
