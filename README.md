@@ -25,7 +25,7 @@ pip install -r requirements.txt
 export OPENAI_API_KEY="your-key-here"
 ```
 
-3. (Optional) For vision tasks, set up vision expert servers following VisualSketchpad's instructions.
+3. For vision tasks, set up vision expert servers following VisualSketchpad's instructions.
 
 ## Usage
 
