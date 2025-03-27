@@ -1,84 +1,162 @@
-# Multimodal Chain-of-Thought (CoT) Dataset Creation Pipeline
+# **Multimodal Chain-of-Thought (CoT) Dataset Creation Pipeline**
 
-## Overview
-This project extends the Visual Sketchpad framework by creating an automated pipeline for generating a multimodal Chain-of-Thought (CoT) dataset. The dataset is aimed at training models to perform multimodal reasoning by combining text and images through visual sketching steps, across multiple domains. This includes traditional tasks such as geometry and graph theory, as well as new domains like physics, chemistry, and more interactive tasks like games.
+## **Overview**
+This project extends the **Visual Sketchpad** framework by creating an **automated pipeline** for generating a **multimodal Chain-of-Thought (CoT)** dataset. The dataset is aimed at training models to perform **multimodal reasoning** by combining **text and images through visual sketching steps**, across multiple domains. This includes traditional tasks such as geometry and graph theory, as well as new domains like physics, chemistry, and interactive tasks like games.
 
-The Visual Sketchpad paper (NeurIPS 2024) proposed generating multimodal reasoning traces for tasks involving sketching as part of the reasoning process. This project uses their agent framework, integrates vision experts, and extends their task categories to create a new and diverse multimodal dataset.
+The original Visual Sketchpad paper (NeurIPS 2024) proposed generating **step-by-step multimodal reasoning traces** for tasks involving sketching as part of the solution. This project uses their **agent framework**, integrates their **vision experts**, and extends their **task domains** to build a much larger and more diverse dataset, ultimately to enable training **R1-style** any-to-any multimodal models.
 
-## Visual Sketchpad Recap
-The Visual Sketchpad paper provides a dataset with 2046 tasks across several categories. These tasks focus on generating step-by-step reasoning traces that combine text and images. Here's a summary of what is included in the dataset:
+---
 
-### Domains Covered:
-- **Geometry**: Tasks like determining angles, constructing lines, and calculating areas.
-- **Graph Theory**: Problems like checking connectivity, isomorphisms, and max flow in graphs.
-- **Mathematics**: Tasks like determining convexity, parity, or other properties of functions.
-- **Puzzle Games**: Such as Sokoban (grid-based game).
-- **Vision Tasks**: Such as spatial reasoning, depth analysis, and jigsaw solving.
+## **Visual Sketchpad Recap**
 
+The Visual Sketchpad paper provides a dataset of **2046 tasks** across several categories. These tasks focus on generating **step-by-step reasoning traces** that combine **textual and visual sketching actions**. Each task simulates how a multimodal agent would reason through a problem, drawing intermediate diagrams along the way.
+
+### **Domains Covered**:
+- **Geometry**: Determining angles, constructing lines, and calculating areas.
+- **Graph Theory**: Checking connectivity, isomorphism, max flow, etc.
+- **Mathematics**: Function analysis (convexity, parity), plotting, etc.
+- **Puzzle Games**: Sokoban-style grid puzzles.
+- **Vision Tasks**: Spatial reasoning, depth perception, jigsaw assembly.
+
+### **What's in a Task?**
 Each task includes:
-- A prompt: The text that describes the task.
-- A diagram/image: Often representing a problem (e.g., a geometric shape or graph).
-- A step-by-step reasoning trace: This is the multimodal CoT, including text and images created by the agent.
+- A **prompt**: The question the agent must answer.
+- A **diagram/image**: Often representing a structure or state to reason about.
+- A **reasoning trace**: A sequence of **interleaved natural language + visual sketching steps** (i.e., a multimodal Chain-of-Thought).
 
-The original dataset is small (~2,000 tasks), domain-limited, and uses pre-rendered images. The aim of this project is to expand this dataset and make it more diverse, with new task categories.
+---
 
-## Project Structure
-This repository consists of several components, each with a specific function:
+## **How Visual Sketchpad Generates Reasoning Traces**
 
-### Core Files
-- `agent/`: Contains the agent framework for multimodal reasoning.
-- `tasks/`: Where the tasks are stored. New tasks will be generated here.
-- `outputs/`: Contains the generated reasoning traces (text + visual steps).
-- `generate_datasets/`: Custom scripts to automatically generate new tasks.
-- `interactive_tools/`: Tools for visualizing tasks and inspecting dataset quality.
-- `vision_experts/`: Setup files for integrating vision tools like SAM, GroundingDINO, and DepthAnything.
+Unlike LLM-based approaches, Visual Sketchpad does **not** use GPT-style models to generate reasoning. Instead, it uses a **hand-coded agent system**:
 
-## New Tasks to Be Generated
-- **Physics**: Mechanics, force diagrams, motion trajectories, and vector fields.
-- **Chemistry**: Reaction diagrams, balancing equations, atomic structures.
-- **Calculus**: Derivatives, integrals, tangent lines, optimization plots.
-- **Turing Machines**: Finite automata diagrams, Turing machine tapes.
-- **Circuit Diagrams**: Circuit analysis problems with resistors, voltage, and current.
-- **Maze**: Puzzle-solving tasks, reasoning over mazes and shortest paths.
-- **Tetris**: Predict next move, reason about piece fits, sketch possible paths.
-- **Scientific Diagrams**: Diagrams scraped from papers (e.g., arXiv or Wikipedia) with LLM-generated CoT.
-- **OCR Captioning**: Images with scientific figure captions → generate reasoning over them.
-- **Code Diagrams**: Flowcharts or code visualizations, reasoning about program structure.
+### 🔧 Agent-Driven Trace Generation:
+- A scripted **assistant agent** reasons through the task.
+- At each step, it:
+  - Outputs a **natural language explanation**
+  - Optionally executes **Python code** to render a sketch (e.g., draw a line or plot)
+  - Calls **vision tools** (like SAM or GroundingDINO) when needed
+- Each step is logged as part of a growing **trace** — a combination of text and images.
 
-## Dataset Generation Pipeline
-### Steps for Dataset Creation
-1. **Generate Math/Graph Tasks**:
-   - Reuse existing code from `math_data.py` to generate common math problems (convexity, graph theory).
-   - These can be generated automatically based on predefined templates (`TASK2PROMPT`) and using sympy for symbolic mathematics.
+### 🧪 Example Trace Format:
+```
+USER: <img src="triangle.png"> What is angle ABC?
 
-2. **Create Custom Scripts for New Domains**:
-   - Physics: Use tools like matplotlib and sympy to create physics-related tasks (e.g., free-body diagrams, projectile motion).
-   - Calculus: Generate derivatives, integrals, and visual plots of functions.
-   - Turing: Generate finite automata diagrams and reasoning tasks.
+A:
+Step 1: Extend line AB to better isolate angle ABC.
+[Sketch: extended_line.png]
 
-3. **Generate Visualizations**:
-   - Use tools in `tools.py` like `AnnotatedImage` for adding visual annotations and drawing steps.
-   - Use vision experts (SAM, GroundingDINO) for tasks requiring image segmentation, object detection, or depth analysis.
+Step 2: Now we see that triangle ABC has angle of 45 degrees.
+[Answer: 45°]
+```
 
-4. **Format the Task JSONs**:
-   - Each task should consist of:
-     - A text prompt (what's the problem).
-     - A list of images (if applicable).
-     - A solution trace generated by the agent (for later evaluation).
-   - Tasks should be stored in `tasks/{domain}/{id}/`.
+### ✅ Pros:
+- Fully controllable and deterministic
+- Integrates vision tools cleanly
+- Easy to evaluate the impact of sketching
 
-5. **Run the Agent on New Tasks**:
-   - Use `run_task.py` to evaluate your generated tasks and create reasoning traces in `outputs/`.
+### ❌ Cons:
+- Not scalable — each domain must be hand-coded
+- Lacks natural diversity and expressiveness
+- Doesn't reflect how learned models will reason in practice
 
-## Reusing the Visual Sketchpad Dataset
-You can reuse the existing tasks from VisualSketchpad (`tasks/seed_tasks/`) as initial templates and extend them with new domains (like physics, chemistry, etc.). This allows you to bootstrap your task generation pipeline and start testing your extended dataset right away.
+---
 
-### How to Reuse:
-- Keep the original tasks in `seed_tasks/` — you can use them as a baseline for testing your new agent or visual reasoning pipeline.
-- Create new task folders (e.g., `tasks/physics/`, `tasks/chemistry/`) and add them to your dataset generator scripts.
+## 🔄 Our New Approach: LLM-Generated Traces
 
-## Vision Expert Integration
-VisualSketchpad uses multiple vision expert tools (SAM, GroundingDINO, DepthAnything) for segmentation, detection, and depth estimation. These tools are crucial for generating visual CoT steps, especially when reasoning over diagrams or images.
+In this project, we extend Visual Sketchpad's framework by allowing reasoning traces to be:
+- **Generated using OpenAI's API (e.g., GPT-4)** or other LLMs
+- **Formatted using <sketch> tags** to describe when visual sketches are needed
+- **Paired with scripts that render the described sketches automatically**
+
+This allows for:
+- More fluent and diverse reasoning styles
+- Scalable dataset creation (10k–50k+ examples)
+- Training models in an **R1-style** framework where sketching becomes a learned behavior
+
+---
+
+## **Project Structure**
+
+This repository consists of several components:
+
+| Folder/File            | Purpose                                                               |
+|------------------------|-----------------------------------------------------------------------|
+| `agent/`               | Agent framework and utilities for multimodal reasoning                |
+| `tasks/`               | Stores problem/task definitions (prompt, image, ground truth, etc.)   |
+| `outputs/`             | Stores reasoning traces generated by the agent or LLMs                |
+| `generate_datasets/`   | Scripts for automatically generating new domain-specific tasks        |
+| `interactive_tools/`   | Utilities for visualizing and validating data                         |
+| `vision_experts.md`    | Configuration and server code for tools like SAM, DINO, DepthAnything |
+
+---
+
+## **New Tasks to Be Generated**
+
+We go beyond Visual Sketchpad's original categories with new domains that include both scientific reasoning and complex visual problem-solving:
+
+- **Physics**: Free-body diagrams, motion trajectories, vector fields
+- **Chemistry**: Reaction diagrams, molecule structures, balancing equations
+- **Calculus**: Derivatives, integrals, tangent lines, optimization plots
+- **Turing Machines**: Tape transitions, finite automata
+- **Circuit Diagrams**: Resistance, current flow, and circuit analysis tasks
+- **Maze Reasoning**: Puzzle-solving, shortest paths
+- **Tetris Reasoning**: Predict fit, sketch drop zones
+- **Scientific Figures**: Scraped from arXiv/Wikipedia + LLM-generated CoT
+- **OCR Captioning**: Reasoning from scientific figure + caption images
+- **Code Diagrams**: Flowcharts or code structure → step-by-step explanation
+
+---
+
+## **Dataset Generation Pipeline**
+
+### Step-by-Step:
+
+1. **Problem Generation**
+   - Use Python scripts to generate prompts (math/physics/graph theory)
+   - Optionally scrape diagrams from external sources (e.g. arXiv figures)
+
+2. **Trace Generation**
+   - Option 1: Use scripted VisualSketchpad agent for interpretable baselines
+   - Option 2: Use OpenAI/GPT-style LLM to generate CoT traces with `<sketch>` blocks
+
+3. **Sketch Rendering**
+   - Use `tools.py` (e.g. `AnnotatedImage`) to render described sketches
+   - Generate labeled diagrams, plots, visual proofs, or physics diagrams
+
+4. **Formatting**
+   - Save `request.json`, `image.png`, `trace.json`, and any intermediate sketches
+   - Store under `tasks/{domain}/{id}/`
+
+5. **Optional Agent Evaluation**
+   - Run `run_task.py` to evaluate reasoning agents on your dataset
+   - Output traces go into `outputs/{domain}/{id}/`
+
+---
+
+## **Reusing Visual Sketchpad's Tasks**
+
+You can reuse and modify the original 2046 tasks from `tasks/seed_tasks/`. These serve as:
+- Benchmarks for your generation pipeline
+- Templates to ensure task format consistency
+- Gold traces for comparing rule-based vs. LLM-based reasoning
+
+---
+
+## **Vision Expert Integration**
+
+Visual Sketchpad integrates vision models as callable microservices:
+- **SAM** (Segment Anything Model) for object segmentation
+- **GroundingDINO** for object grounding and bounding box detection
+- **DepthAnything** for estimating spatial relationships
+
+You can call them directly from `tools.py` during reasoning trace generation or sketch rendering.
 
 ### Setup:
-The `vision_experts/` folder contains setup files and instructions on running these vision tools as services.
+1. Launch the servers via `vision_experts.md`
+2. Use the API endpoints from `tools.py` to call:
+   - `segment_and_mark()`
+   - `detection()`
+   - `overlay_images()` etc.
+
+---
