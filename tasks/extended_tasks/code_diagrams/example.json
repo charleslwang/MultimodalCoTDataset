@@ -1,0 +1,1 @@
+{"task": "code_flow", "query": "Analyze the flowchart showing a binary search algorithm", "images": ["binary_search.jpg"], "label": "The algorithm performs O(log n) comparisons by repeatedly dividing the search interval in half"}

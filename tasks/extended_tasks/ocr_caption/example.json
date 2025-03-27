@@ -1,0 +1,1 @@
+{"task": "figure_reasoning", "query": "Based on the graph showing population growth over time, what is the carrying capacity?", "images": ["population_graph.jpg"], "caption": "Logistic growth curve of bacterial population in nutrient medium", "label": "The carrying capacity K is 1000 cells/mL, shown by the horizontal asymptote"}

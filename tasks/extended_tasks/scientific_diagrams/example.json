@@ -1,0 +1,1 @@
+{"task": "diagram_interpretation", "query": "Analyze the phase diagram showing water's states of matter", "images": ["phase_diagram.jpg"], "label": "At standard pressure (1 atm), water exists as solid below 0°C, liquid between 0-100°C, and gas above 100°C"}

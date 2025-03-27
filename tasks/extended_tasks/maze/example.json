@@ -1,0 +1,1 @@
+{"task": "pathfinding", "query": "Find the shortest path in this maze:\n###S#\n#   #\n# # #\n#G###", "label": "Path: S→↓→↓→G (5 steps)"}

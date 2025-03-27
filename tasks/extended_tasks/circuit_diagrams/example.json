@@ -1,0 +1,1 @@
+{"task": "circuit_analysis", "query": "Calculate the equivalent resistance of two 10Ω resistors in parallel", "label": "5Ω (R_eq = (R1*R2)/(R1+R2) = (10*10)/(10+10) = 5Ω)"}
