@@ -1,11 +1,63 @@
-new tasks:
-physics/	Mechanics, force diagrams, trajectories, vector fields
-chemistry/	Reaction diagrams, balancing equations, atomic structures
-calculus/	Derivatives, integrals, tangent lines, optimization plots
-turing/	Finite automata diagrams, Turing machine tapes
-circuit_diagrams/	Circuit analysis problems with resistors, voltage, current
-maze/	Puzzle-solving tasks — reasoning over mazes, shortest path
-tetris/	Predict next move, reason about piece fits, sketch possible paths
-scientific_diagrams/	Diagrams scraped from arXiv or Wikipedia with LLM-generated CoT
-ocr_caption/	Images with scientific figure captions → generate reasoning over them
-code_diagrams/	Flowcharts or code visualizations, reasoning about program structure
+Existing Tasks
+
+IsoBench [8]: Math Parity (383 problems), Math Convexity (255), 
+   Graph Maxflow (128), Graph Connectivity (128), Graph Isomorphism (128), Winner ID (257)
+Vision tasks: V*Bench (257 problems), MMVP (300), and 
+   various BLINK tasks ranging from 124 to 172 problems each
+
+Extended Task Categories
+
+A. Programmatically Generated Tasks
+---------------------------------
+physics/
+- Content: Mechanics, force diagrams, trajectories, vector fields
+- Implementation: Use symbolic engines (SymPy), matplotlib for diagrams, physics solvers
+- Generate: Force diagrams, projectile motion, free-body problems
+
+calculus/
+- Content: Derivatives, integrals, tangent lines, optimization plots
+- Implementation: Use matplotlib + sympy for derivatives/integrals
+- Generate: Plots showing tangent lines, concavity, area under curve
+
+circuit_diagrams/
+- Content: Circuit analysis problems with resistors, voltage, current
+- Implementation: Use schemdraw library
+- Generate: Circuit diagrams + calculations for resistance, current, voltage
+
+maze/
+- Content: Puzzle-solving tasks — reasoning over mazes, shortest path
+- Implementation: Generate grid mazes programmatically
+- Generate: Pathfinding questions, BFS/DFS traces for CoT
+
+tetris/
+- Content: Predict next move, reason about piece fits, sketch paths
+- Implementation: Use pre-coded Tetris states or simulation
+- Generate: Board states, optimal move predictions
+
+turing/
+- Content: Finite automata diagrams, Turing machine tapes
+- Implementation: Use FSM or graph libraries
+- Generate: Machine states, tapes, visual state transitions
+
+B. Scraped and LLM-Enhanced Tasks
+--------------------------------
+scientific_diagrams/
+- Content: Diagrams from arXiv, Wikipedia with LLM-generated CoT
+- Source: Academic papers, educational resources
+- Process: OCR + LLM for question/reasoning generation
+
+ocr_caption/
+- Content: Images with scientific figure captions
+- Source: Textbook figures, slide decks
+- Process: LLM generates reasoning questions from captions
+
+code_diagrams/
+- Content: Flowcharts, call graphs, UML diagrams
+- Source: Codebases, technical blogs
+- Process: Scrape diagrams + LLM generates reasoning queries
+
+chemistry/
+- Content: Reaction diagrams, molecular structures, equations
+- Mixed Approach:
+  * Programmatic: Generate balancing equations, simple reactions
+  * Scraped: Complex molecules/reactions from PubChem, papers
